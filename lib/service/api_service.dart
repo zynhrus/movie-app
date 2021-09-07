@@ -32,12 +32,12 @@ class ApiService {
     return movies;
   }
 
-  Future<List<Movie>> getTrendingMovieThisWeek() async {
+  Future<List<Movie>> getTrendingMovieThisWeek(int page) async {
     var movies;
 
     try {
       Response response =
-          await _dio.get(_baseUrl + '/trending/movie/week?api_key=$key');
+          await _dio.get(_baseUrl + '/trending/movie/week?api_key=$key&page=$page');
       movies = (response.data['results'] as List)
           .map((movie) => Movie.fromJson(movie))
           .toList();

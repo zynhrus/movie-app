@@ -10,7 +10,12 @@ abstract class MovieState extends Equatable {
 class MovieInitial extends MovieState {
 
 }
-class MovieLoading extends MovieState {}
+class MovieLoading extends MovieState {
+  final List<Movie> oldMovies;
+  final bool isFirstFetch;
+
+  MovieLoading(this.oldMovies, {this.isFirstFetch=false});
+}
 
 class GetMovieSuccess extends MovieState {
   final List<Movie> movies;

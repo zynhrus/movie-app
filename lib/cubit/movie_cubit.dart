@@ -10,11 +10,28 @@ class MovieCubit extends Cubit<MovieState> {
 
   MovieCubit(this.apiService) : super(MovieInitial());
 
+  int page = 1;
+
   void getTrendingMovie() async {
+    if (state is MovieLoading) return;
+
+    final currentState = state;
+    var oldMovies = <Movie>[];
+
+    if (currentState is GetMovieSuccess) {
+      oldMovies = currentState.movies;
+    }
+
     try {
-      emit(MovieLoading());
-      var movies = await apiService.getTrendingMovieThisWeek();
-      emit(GetMovieSuccess(movies));
+      emit(MovieLoading(oldMovies,isFirstFetch: page == 1));
+      apiService.getTrendingMovieThisWeek(page).then((newMovies) {
+        page++;
+
+        final movies = (state as MovieLoading).oldMovies;
+        movies.addAll(newMovies);
+
+        emit(GetMovieSuccess(movies));
+      });
     } catch (e) {
       print(e);
       emit(GetMovieFailed(e.toString()));
@@ -22,8 +39,17 @@ class MovieCubit extends Cubit<MovieState> {
   }
 
   void getSearchMovieResults(String movieName) async {
+    if (state is MovieLoading) return;
+
+    final currentState = state;
+
+    var oldMovies = <Movie>[];
+    if (currentState is GetMovieSuccess) {
+      oldMovies = currentState.movies;
+    }
+
     try {
-      emit(MovieLoading());
+      emit(MovieLoading(oldMovies,isFirstFetch: page == 1));
       var movies = await apiService.searchMovie(movieName);
       emit(GetMovieSuccess(movies));
     } catch (e) {
@@ -31,5 +57,4 @@ class MovieCubit extends Cubit<MovieState> {
       emit(GetMovieFailed(e.toString()));
     }
   }
-
 }
