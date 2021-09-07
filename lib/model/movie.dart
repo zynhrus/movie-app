@@ -11,7 +11,7 @@ class Movie {
   String title;
   double voteAverage;
   String overview;
-  String releaseDate;
+  String? releaseDate;
   int voteCount;
   bool adult;
   String? backdropPath;
@@ -34,7 +34,7 @@ class Movie {
       required this.video,
       required this.genreIds,
       required this.popularity,
-      required});
+      });
 
   factory Movie.fromJson(Map<String, dynamic> json) => _$MovieFromJson(json);
 

@@ -15,7 +15,7 @@ Movie _$MovieFromJson(Map<String, dynamic> json) {
     title: json['title'] as String,
     voteAverage: (json['vote_average'] as num).toDouble(),
     overview: json['overview'] as String,
-    releaseDate: json['release_date'] as String,
+    releaseDate: json['release_date'] as String?,
     voteCount: json['vote_count'] as int,
     adult: json['adult'] as bool,
     backdropPath: json['backdrop_path'] as String?,

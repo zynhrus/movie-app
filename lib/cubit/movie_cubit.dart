@@ -24,7 +24,7 @@ class MovieCubit extends Cubit<MovieState> {
 
     try {
       emit(MovieLoading(oldMovies,isFirstFetch: page == 1));
-      apiService.getTrendingMovieThisWeek(page).then((newMovies) {
+      await apiService.getTrendingMovieThisWeek(page).then((newMovies) {
         page++;
 
         final movies = (state as MovieLoading).oldMovies;

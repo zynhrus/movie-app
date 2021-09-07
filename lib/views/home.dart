@@ -71,6 +71,16 @@ class _HomePageState extends State<HomePage> {
           );
         }
 
+        if (movies.isEmpty) {
+          return Center(
+            child: Text(
+              "There are no results, please search other movie name",
+              textAlign: TextAlign.center,
+              style: primaryColorTextStyle.copyWith(fontSize: 25),
+            ),
+          );
+        }
+
         return Expanded(
           child: ListView.builder(
             controller: scrollController,

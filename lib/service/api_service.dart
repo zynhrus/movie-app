@@ -14,7 +14,6 @@ class ApiService {
       Response response =
       await _dio.get(_baseUrl + '/search/movie?api_key=$key&page=1&query=$movieName');
 
-      print(response.data['results']);
       movies = (response.data['results'] as List)
           .map((movie) => Movie.fromJson(movie))
           .toList();
