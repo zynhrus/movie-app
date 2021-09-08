@@ -4,18 +4,18 @@ part 'cast.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Cast {
-  bool adult;
-  int gender;
-  int id;
-  String knownForDepartment;
+  bool? adult;
+  int? gender;
+  int? id;
+  String? knownForDepartment;
   String name;
-  String originalName;
-  double popularity;
+  String? originalName;
+  double? popularity;
   String? profilePath;
-  int castId;
+  int? castId;
   String character;
-  String creditId;
-  int order;
+  String? creditId;
+  int? order;
 
   Cast(
       {required this.adult,

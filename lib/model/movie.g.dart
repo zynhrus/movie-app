@@ -9,20 +9,20 @@ part of 'movie.dart';
 Movie _$MovieFromJson(Map<String, dynamic> json) {
   return Movie(
     id: json['id'] as int,
-    originalLanguage: json['original_language'] as String,
-    originalTitle: json['original_title'] as String,
+    originalLanguage: json['original_language'] as String?,
+    originalTitle: json['original_title'] as String?,
     posterPath: json['poster_path'] as String?,
     title: json['title'] as String,
     voteAverage: (json['vote_average'] as num).toDouble(),
     overview: json['overview'] as String,
     releaseDate: json['release_date'] as String?,
     voteCount: json['vote_count'] as int,
-    adult: json['adult'] as bool,
+    adult: json['adult'] as bool?,
     backdropPath: json['backdrop_path'] as String?,
-    video: json['video'] as bool,
+    video: json['video'] as bool?,
     genreIds:
-        (json['genre_ids'] as List<dynamic>).map((e) => e as int).toList(),
-    popularity: (json['popularity'] as num).toDouble(),
+        (json['genre_ids'] as List<dynamic>?)?.map((e) => e as int).toList(),
+    popularity: (json['popularity'] as num?)?.toDouble(),
   );
 }
 
