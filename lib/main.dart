@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/cubit/cast_cubit.dart';
+import 'package:movie_app/cubit/movie_detail_cubit.dart';
 import 'package:movie_app/cubit/page_cubit.dart';
 import 'package:movie_app/cubit/movie_cubit.dart';
 import 'package:movie_app/service/api_service.dart';
@@ -19,6 +21,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => MovieCubit(ApiService()),
+        ),
+        BlocProvider(
+          create: (context) => MovieDetailCubit(ApiService()),
+        ),
+        BlocProvider(
+          create: (context) => CastCubit(ApiService()),
         )
       ],
       child: MaterialApp(

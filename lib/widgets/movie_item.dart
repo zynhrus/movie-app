@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/model/movie.dart';
-import 'package:movie_app/shared/base_image.dart';
+import 'package:movie_app/shared/url_helper.dart';
 import 'package:movie_app/shared/theme.dart';
 
 class MovieItem extends StatelessWidget {
@@ -22,7 +22,7 @@ class MovieItem extends StatelessWidget {
             child: FadeInImage.assetNetwork(
               width: 110,
               placeholder: 'assets/loading.gif',
-              image: "$baseImageUrlMedium${movie.posterPath}",
+              image: "$posterImageUrlMedium${movie.posterPath}",
               height: 165,
               imageErrorBuilder: (context, url, error) => Image.asset(
                 'assets/no_image.png',

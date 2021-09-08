@@ -4,6 +4,7 @@ import 'package:movie_app/cubit/movie_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/model/movie.dart';
 import 'package:movie_app/shared/theme.dart';
+import 'package:movie_app/views/detail.dart';
 import 'package:movie_app/widgets/movie_item.dart';
 import 'package:movie_app/widgets/search_bar.dart';
 
@@ -47,13 +48,15 @@ class _HomePageState extends State<HomePage> {
   Widget bodyList() {
     return BlocBuilder<MovieCubit, MovieState>(
       builder: (context, state) {
+        List<Movie> movies = [];
+        bool isLoading = false;
+
+        // First time load data show loading indicator
         if (state is MovieLoading && state.isFirstFetch) {
           return loadingIndicator();
         }
 
-        List<Movie> movies = [];
-        bool isLoading = false;
-
+        // If state loading show old data that have been loaded, if state already success show new loaded data
         if (state is MovieLoading) {
           movies = state.oldMovies;
           isLoading = true;
@@ -61,6 +64,7 @@ class _HomePageState extends State<HomePage> {
           movies = state.movies;
         }
 
+        // If there is something error
         if (state is GetMovieFailed) {
           return Center(
             child: Text(
@@ -71,6 +75,7 @@ class _HomePageState extends State<HomePage> {
           );
         }
 
+        // if the results is empty
         if (movies.isEmpty) {
           return Center(
             child: Text(
@@ -81,6 +86,7 @@ class _HomePageState extends State<HomePage> {
           );
         }
 
+        // Show the list if movies success loaded
         return Expanded(
           child: ListView.builder(
             controller: scrollController,
@@ -88,16 +94,35 @@ class _HomePageState extends State<HomePage> {
             itemBuilder: (context, index) {
               if (index < movies.length) {
                 var movie = movies[index];
-                return MovieItem(movie: movie);
+
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailPage(
+                          id: movie.id.toString(),
+                        ),
+                      ),
+                    );
+                  },
+                  child: MovieItem(movie: movie),
+                );
               } else {
-                Timer(Duration(milliseconds: 30), () {
-                  scrollController
-                      .jumpTo(scrollController.position.maxScrollExtent);
-                });
+                Timer(
+                  Duration(milliseconds: 30),
+                  () {
+                    scrollController.jumpTo(
+                      scrollController.position.maxScrollExtent,
+                    );
+                  },
+                );
 
                 return loadingIndicator();
               }
             },
+
+            // ifLoading add 1 empty cell for show the loadingIndicator
             itemCount: movies.length + (isLoading ? 1 : 0),
           ),
         );

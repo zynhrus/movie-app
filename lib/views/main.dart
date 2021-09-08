@@ -24,14 +24,17 @@ class MainPage extends StatelessWidget {
 
     return BlocBuilder<PageCubit, int>(
       builder: (context, currentIndex) {
-        return SafeArea(
-          child: Scaffold(
-            backgroundColor: kBackgroundColor,
-            body: Stack(
-              children: [
-                buildContent(currentIndex),
-                CustomBottomNavigation(),
-              ],
+        return Container(
+          color: kBackgroundColor,
+          child: SafeArea(
+            child: Scaffold(
+              backgroundColor: kBackgroundColor,
+              body: Stack(
+                children: [
+                  buildContent(currentIndex),
+                  CustomBottomNavigation(),
+                ],
+              ),
             ),
           ),
         );
