@@ -3,6 +3,7 @@ import 'package:movie_app/cubit/page_cubit.dart';
 import 'package:movie_app/shared/theme.dart';
 import 'package:movie_app/views/favorite.dart';
 import 'package:movie_app/views/home.dart';
+import 'package:movie_app/views/ticket.dart';
 import 'package:movie_app/widgets/custom_buttom_navigation_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,6 +17,8 @@ class MainPage extends StatelessWidget {
         case 0:
           return HomePage();
         case 1:
+          return TicketPage();
+        case 2:
           return FavoritePage();
         default:
           return HomePage();
@@ -67,8 +70,12 @@ class CustomBottomNavigation extends StatelessWidget {
               index: 0,
             ),
             CustomBottomNavigationItem(
-              image: "assets/book.png",
+              image: "assets/ticket.png",
               index: 1,
+            ),
+            CustomBottomNavigationItem(
+              image: "assets/book.png",
+              index: 2,
             ),
           ],
         ),

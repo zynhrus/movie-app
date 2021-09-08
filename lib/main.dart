@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/cubit/cast_cubit.dart';
-import 'package:movie_app/cubit/favorite_cubit.dart';
 import 'package:movie_app/cubit/favorite_movie_cubit.dart';
 import 'package:movie_app/cubit/movie_detail_cubit.dart';
 import 'package:movie_app/cubit/page_cubit.dart';
 import 'package:movie_app/cubit/movie_cubit.dart';
+import 'package:movie_app/cubit/seat_cubit.dart';
 import 'package:movie_app/model/favorite_movie.dart';
 import 'package:movie_app/service/api_service.dart';
 import 'package:movie_app/views/main.dart';
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           create: (context) => FavoriteMovieCubit(Database()),
         ),
         BlocProvider(
-          create: (context) => FavoriteCubit(),
+          create: (context) => SeatCubit(),
         )
       ],
       child: MaterialApp(
