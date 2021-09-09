@@ -29,4 +29,6 @@ class DatabaseMyTickets extends _$DatabaseMyTickets {
   Future insertMyTicket(MyTicket myTicket) => into(tickets).insert(myTicket);
 
   Future deleteMyTicket(MyTicket myTicket) => delete(tickets).delete(myTicket);
+
+  Future updateMyTicket(MyTicket myTicket) => update(tickets).replace(myTicket);
 }

@@ -77,7 +77,7 @@ class _FavoritePageState extends State<FavoritePage> {
                           secondaryActions: <Widget>[
                             IconSlideAction(
                               caption: 'Delete',
-                              color: Colors.red,
+                              color: kRedColor,
                               icon: Icons.delete,
                               onTap: () {
                                 database.deleteFavoriteMovie(favoriteMovie);
