@@ -14,6 +14,7 @@ class MovieDetail {
    String title;
    double? voteAverage;
    int? voteCount;
+   String? releaseDate;
 
   @JsonKey(ignore: true)
   late String trailedId;
@@ -29,6 +30,7 @@ class MovieDetail {
     required this.title,
     required this.voteAverage,
     required this.voteCount,
+    required this.releaseDate
   });
 
   factory MovieDetail.fromJson(Map<String, dynamic> json) =>

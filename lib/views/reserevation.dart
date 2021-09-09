@@ -1,20 +1,36 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:movie_app/cubit/seat_cubit.dart';
+import 'package:movie_app/cubit/ticket_cubit.dart';
+import 'package:movie_app/model/movie_detail.dart';
+import 'package:movie_app/model/ticket.dart';
 import 'package:movie_app/shared/theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:movie_app/views/main.dart';
 
-class ReservationPage extends StatelessWidget {
-  const ReservationPage({Key? key}) : super(key: key);
+class ReservationPage extends StatefulWidget {
+  const ReservationPage({Key? key, required this.movie}) : super(key: key);
+
+  final MovieDetail movie;
+
+  @override
+  _ReservationPageState createState() => _ReservationPageState();
+}
+
+class _ReservationPageState extends State<ReservationPage> {
+  @override
+  void initState() {
+    context.read<TicketCubit>().getMyTickets();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
-          color: kPrimaryColor, //change your color here
+          color: kPrimaryColor,
         ),
         backgroundColor: kTransparentColor,
         elevation: 0,
@@ -32,7 +48,9 @@ class ReservationPage extends StatelessWidget {
               child: Image.asset("assets/movie_screen.png"),
             ),
             SizedBox(height: 30),
-            SeatSection()
+            SeatSection(
+              movie: widget.movie,
+            )
           ],
         ),
       ),
@@ -40,16 +58,11 @@ class ReservationPage extends StatelessWidget {
   }
 }
 
-class SeatSection extends StatefulWidget {
-  const SeatSection({
-    Key? key,
-  }) : super(key: key);
+class SeatSection extends StatelessWidget {
+  const SeatSection({Key? key, required this.movie}) : super(key: key);
 
-  @override
-  _SeatSectionState createState() => _SeatSectionState();
-}
+  final MovieDetail movie;
 
-class _SeatSectionState extends State<SeatSection> {
   @override
   Widget build(BuildContext context) {
     bool randomBool() {
@@ -136,7 +149,7 @@ class _SeatSectionState extends State<SeatSection> {
               ],
             ),
             SizedBox(height: 30),
-            SeatSummary(),
+            SeatSummary(movie: movie),
           ],
         ),
       ),
@@ -216,7 +229,9 @@ class SeatItem extends StatelessWidget {
 }
 
 class SeatSummary extends StatefulWidget {
-  const SeatSummary({Key? key}) : super(key: key);
+  const SeatSummary({Key? key, required this.movie}) : super(key: key);
+
+  final MovieDetail movie;
 
   @override
   _SeatSummaryState createState() => _SeatSummaryState();
@@ -241,29 +256,54 @@ class _SeatSummaryState extends State<SeatSummary> {
 
   @override
   Widget build(BuildContext context) {
+    final database = context.read<TicketCubit>().database;
+
     var price = 45000;
+    var movie = widget.movie;
+    var totalPrice;
     date = "${selectedDate.toLocal()}".split(' ')[0];
 
     return BlocBuilder<SeatCubit, List<String>>(
       builder: (context, state) {
+        totalPrice = state.length * price;
+
         return Column(
           children: [
             dateAndTime(context),
             seat(state),
             SizedBox(height: 16),
-            total(state, price),
+            total(state.length, price),
             SizedBox(height: 16),
-            Container(
-              decoration: BoxDecoration(
-                color: kPrimaryColor,
-                borderRadius: BorderRadius.circular(defaultBorderRadius),
-              ),
-              height: 50,
-              width: double.infinity,
-              child: Center(
-                child: Text(
-                  "Buy Ticket",
-                  style: whiteTextStyle.copyWith(fontSize: 18, fontWeight: bold),
+            GestureDetector(
+              onTap: () {
+                final myTicket = MyTicket(
+                    idMovie: movie.id,
+                    title: movie.title,
+                    poster: movie.posterPath,
+                    date: date,
+                    time: selectedTime,
+                    seats: state.join(", "),
+                    total: totalPrice.toString());
+
+                database.insertMyTicket(myTicket);
+                context.read<SeatCubit>().clearSeat();
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => MainPage()),
+                    (Route<dynamic> route) => false);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: kPrimaryColor,
+                  borderRadius: BorderRadius.circular(defaultBorderRadius),
+                ),
+                height: 50,
+                width: double.infinity,
+                child: Center(
+                  child: Text(
+                    "Buy Ticket",
+                    style:
+                        whiteTextStyle.copyWith(fontSize: 18, fontWeight: bold),
+                  ),
                 ),
               ),
             )
@@ -331,25 +371,50 @@ class _SeatSummaryState extends State<SeatSummary> {
     );
   }
 
-  Widget total(List<String> state, int price) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget total(int ticketAmount, int price) {
+    return Column(
       children: [
-        Text(
-          "Total",
-          style: greyTextStyle.copyWith(
-            fontSize: 14,
-            fontWeight: light,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Price",
+              style: greyTextStyle.copyWith(
+                fontSize: 14,
+                fontWeight: light,
+              ),
+            ),
+            Text(
+              NumberFormat.currency(locale: "id", symbol: "IDR ", decimalDigits: 0)
+                  .format(price),
+              style: primaryColorTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: semiBold,
+              ),
+            )
+          ],
         ),
-        Text(
-          NumberFormat.currency(locale: "id", symbol: "IDR ", decimalDigits: 0)
-              .format(state.length * price),
-          style: primaryColorTextStyle.copyWith(
-            fontSize: 16,
-            fontWeight: semiBold,
-          ),
-        )
+        SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Total",
+              style: greyTextStyle.copyWith(
+                fontSize: 14,
+                fontWeight: light,
+              ),
+            ),
+            Text(
+              NumberFormat.currency(locale: "id", symbol: "IDR ", decimalDigits: 0)
+                  .format(ticketAmount * price),
+              style: primaryColorTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: semiBold,
+              ),
+            )
+          ],
+        ),
       ],
     );
   }

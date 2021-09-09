@@ -5,15 +5,15 @@ import 'package:movie_app/model/favorite_movie.dart';
 part 'favorite_movie_state.dart';
 
 class FavoriteMovieCubit extends Cubit<FavoriteMovieState> {
-  final Database database;
+  final DatabaseFavoriteMovie database;
 
   FavoriteMovieCubit(this.database) : super(FavoriteMovieInitial());
 
   void getFavoriteMovies() async {
     try {
       emit(FavoriteMovieLoading());
-      var meals = await database.getAllFavoriteMovies();
-      emit(GetFavoriteMovieSuccess(meals));
+      var movies = await database.getAllFavoriteMovies();
+      emit(GetFavoriteMovieSuccess(movies));
     } catch (e) {
       print(e);
       emit(GetFavoriteMovieFailed(e.toString()));

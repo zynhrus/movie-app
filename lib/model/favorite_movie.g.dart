@@ -13,6 +13,7 @@ class FavoriteMovie extends DataClass implements Insertable<FavoriteMovie> {
   final String title;
   final String overview;
   final String? poster;
+  final String? releaseDate;
   final double voteAverage;
   final int voteCount;
   final bool? isFavorite;
@@ -22,6 +23,7 @@ class FavoriteMovie extends DataClass implements Insertable<FavoriteMovie> {
       required this.title,
       required this.overview,
       this.poster,
+      this.releaseDate,
       required this.voteAverage,
       required this.voteCount,
       this.isFavorite});
@@ -39,6 +41,8 @@ class FavoriteMovie extends DataClass implements Insertable<FavoriteMovie> {
           .mapFromDatabaseResponse(data['${effectivePrefix}overview'])!,
       poster: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}poster']),
+      releaseDate: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}release_date']),
       voteAverage: const RealType()
           .mapFromDatabaseResponse(data['${effectivePrefix}vote_average'])!,
       voteCount: const IntType()
@@ -59,6 +63,9 @@ class FavoriteMovie extends DataClass implements Insertable<FavoriteMovie> {
     if (!nullToAbsent || poster != null) {
       map['poster'] = Variable<String?>(poster);
     }
+    if (!nullToAbsent || releaseDate != null) {
+      map['release_date'] = Variable<String?>(releaseDate);
+    }
     map['vote_average'] = Variable<double>(voteAverage);
     map['vote_count'] = Variable<int>(voteCount);
     if (!nullToAbsent || isFavorite != null) {
@@ -75,6 +82,9 @@ class FavoriteMovie extends DataClass implements Insertable<FavoriteMovie> {
       overview: Value(overview),
       poster:
           poster == null && nullToAbsent ? const Value.absent() : Value(poster),
+      releaseDate: releaseDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(releaseDate),
       voteAverage: Value(voteAverage),
       voteCount: Value(voteCount),
       isFavorite: isFavorite == null && nullToAbsent
@@ -92,6 +102,7 @@ class FavoriteMovie extends DataClass implements Insertable<FavoriteMovie> {
       title: serializer.fromJson<String>(json['title']),
       overview: serializer.fromJson<String>(json['overview']),
       poster: serializer.fromJson<String?>(json['poster']),
+      releaseDate: serializer.fromJson<String?>(json['releaseDate']),
       voteAverage: serializer.fromJson<double>(json['voteAverage']),
       voteCount: serializer.fromJson<int>(json['voteCount']),
       isFavorite: serializer.fromJson<bool?>(json['isFavorite']),
@@ -106,6 +117,7 @@ class FavoriteMovie extends DataClass implements Insertable<FavoriteMovie> {
       'title': serializer.toJson<String>(title),
       'overview': serializer.toJson<String>(overview),
       'poster': serializer.toJson<String?>(poster),
+      'releaseDate': serializer.toJson<String?>(releaseDate),
       'voteAverage': serializer.toJson<double>(voteAverage),
       'voteCount': serializer.toJson<int>(voteCount),
       'isFavorite': serializer.toJson<bool?>(isFavorite),
@@ -118,6 +130,7 @@ class FavoriteMovie extends DataClass implements Insertable<FavoriteMovie> {
           String? title,
           String? overview,
           String? poster,
+          String? releaseDate,
           double? voteAverage,
           int? voteCount,
           bool? isFavorite}) =>
@@ -127,6 +140,7 @@ class FavoriteMovie extends DataClass implements Insertable<FavoriteMovie> {
         title: title ?? this.title,
         overview: overview ?? this.overview,
         poster: poster ?? this.poster,
+        releaseDate: releaseDate ?? this.releaseDate,
         voteAverage: voteAverage ?? this.voteAverage,
         voteCount: voteCount ?? this.voteCount,
         isFavorite: isFavorite ?? this.isFavorite,
@@ -139,6 +153,7 @@ class FavoriteMovie extends DataClass implements Insertable<FavoriteMovie> {
           ..write('title: $title, ')
           ..write('overview: $overview, ')
           ..write('poster: $poster, ')
+          ..write('releaseDate: $releaseDate, ')
           ..write('voteAverage: $voteAverage, ')
           ..write('voteCount: $voteCount, ')
           ..write('isFavorite: $isFavorite')
@@ -157,8 +172,12 @@ class FavoriteMovie extends DataClass implements Insertable<FavoriteMovie> {
                   overview.hashCode,
                   $mrjc(
                       poster.hashCode,
-                      $mrjc(voteAverage.hashCode,
-                          $mrjc(voteCount.hashCode, isFavorite.hashCode))))))));
+                      $mrjc(
+                          releaseDate.hashCode,
+                          $mrjc(
+                              voteAverage.hashCode,
+                              $mrjc(voteCount.hashCode,
+                                  isFavorite.hashCode)))))))));
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -168,6 +187,7 @@ class FavoriteMovie extends DataClass implements Insertable<FavoriteMovie> {
           other.title == this.title &&
           other.overview == this.overview &&
           other.poster == this.poster &&
+          other.releaseDate == this.releaseDate &&
           other.voteAverage == this.voteAverage &&
           other.voteCount == this.voteCount &&
           other.isFavorite == this.isFavorite);
@@ -179,6 +199,7 @@ class FavoritesCompanion extends UpdateCompanion<FavoriteMovie> {
   final Value<String> title;
   final Value<String> overview;
   final Value<String?> poster;
+  final Value<String?> releaseDate;
   final Value<double> voteAverage;
   final Value<int> voteCount;
   final Value<bool?> isFavorite;
@@ -188,6 +209,7 @@ class FavoritesCompanion extends UpdateCompanion<FavoriteMovie> {
     this.title = const Value.absent(),
     this.overview = const Value.absent(),
     this.poster = const Value.absent(),
+    this.releaseDate = const Value.absent(),
     this.voteAverage = const Value.absent(),
     this.voteCount = const Value.absent(),
     this.isFavorite = const Value.absent(),
@@ -198,6 +220,7 @@ class FavoritesCompanion extends UpdateCompanion<FavoriteMovie> {
     required String title,
     required String overview,
     this.poster = const Value.absent(),
+    this.releaseDate = const Value.absent(),
     required double voteAverage,
     required int voteCount,
     this.isFavorite = const Value.absent(),
@@ -212,6 +235,7 @@ class FavoritesCompanion extends UpdateCompanion<FavoriteMovie> {
     Expression<String>? title,
     Expression<String>? overview,
     Expression<String?>? poster,
+    Expression<String?>? releaseDate,
     Expression<double>? voteAverage,
     Expression<int>? voteCount,
     Expression<bool?>? isFavorite,
@@ -222,6 +246,7 @@ class FavoritesCompanion extends UpdateCompanion<FavoriteMovie> {
       if (title != null) 'title': title,
       if (overview != null) 'overview': overview,
       if (poster != null) 'poster': poster,
+      if (releaseDate != null) 'release_date': releaseDate,
       if (voteAverage != null) 'vote_average': voteAverage,
       if (voteCount != null) 'vote_count': voteCount,
       if (isFavorite != null) 'is_favorite': isFavorite,
@@ -234,6 +259,7 @@ class FavoritesCompanion extends UpdateCompanion<FavoriteMovie> {
       Value<String>? title,
       Value<String>? overview,
       Value<String?>? poster,
+      Value<String?>? releaseDate,
       Value<double>? voteAverage,
       Value<int>? voteCount,
       Value<bool?>? isFavorite}) {
@@ -243,6 +269,7 @@ class FavoritesCompanion extends UpdateCompanion<FavoriteMovie> {
       title: title ?? this.title,
       overview: overview ?? this.overview,
       poster: poster ?? this.poster,
+      releaseDate: releaseDate ?? this.releaseDate,
       voteAverage: voteAverage ?? this.voteAverage,
       voteCount: voteCount ?? this.voteCount,
       isFavorite: isFavorite ?? this.isFavorite,
@@ -267,6 +294,9 @@ class FavoritesCompanion extends UpdateCompanion<FavoriteMovie> {
     if (poster.present) {
       map['poster'] = Variable<String?>(poster.value);
     }
+    if (releaseDate.present) {
+      map['release_date'] = Variable<String?>(releaseDate.value);
+    }
     if (voteAverage.present) {
       map['vote_average'] = Variable<double>(voteAverage.value);
     }
@@ -287,6 +317,7 @@ class FavoritesCompanion extends UpdateCompanion<FavoriteMovie> {
           ..write('title: $title, ')
           ..write('overview: $overview, ')
           ..write('poster: $poster, ')
+          ..write('releaseDate: $releaseDate, ')
           ..write('voteAverage: $voteAverage, ')
           ..write('voteCount: $voteCount, ')
           ..write('isFavorite: $isFavorite')
@@ -322,6 +353,11 @@ class $FavoritesTable extends Favorites
   late final GeneratedColumn<String?> poster = GeneratedColumn<String?>(
       'poster', aliasedName, true,
       typeName: 'TEXT', requiredDuringInsert: false);
+  final VerificationMeta _releaseDateMeta =
+      const VerificationMeta('releaseDate');
+  late final GeneratedColumn<String?> releaseDate = GeneratedColumn<String?>(
+      'release_date', aliasedName, true,
+      typeName: 'TEXT', requiredDuringInsert: false);
   final VerificationMeta _voteAverageMeta =
       const VerificationMeta('voteAverage');
   late final GeneratedColumn<double?> voteAverage = GeneratedColumn<double?>(
@@ -345,6 +381,7 @@ class $FavoritesTable extends Favorites
         title,
         overview,
         poster,
+        releaseDate,
         voteAverage,
         voteCount,
         isFavorite
@@ -383,6 +420,12 @@ class $FavoritesTable extends Favorites
       context.handle(_posterMeta,
           poster.isAcceptableOrUnknown(data['poster']!, _posterMeta));
     }
+    if (data.containsKey('release_date')) {
+      context.handle(
+          _releaseDateMeta,
+          releaseDate.isAcceptableOrUnknown(
+              data['release_date']!, _releaseDateMeta));
+    }
     if (data.containsKey('vote_average')) {
       context.handle(
           _voteAverageMeta,
@@ -420,8 +463,9 @@ class $FavoritesTable extends Favorites
   }
 }
 
-abstract class _$Database extends GeneratedDatabase {
-  _$Database(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
+abstract class _$DatabaseFavoriteMovie extends GeneratedDatabase {
+  _$DatabaseFavoriteMovie(QueryExecutor e)
+      : super(SqlTypeSystem.defaultInstance, e);
   late final $FavoritesTable favorites = $FavoritesTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();

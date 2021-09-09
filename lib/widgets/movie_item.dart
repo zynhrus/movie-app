@@ -43,7 +43,13 @@ class MovieItem extends StatelessWidget {
                     fontSize: 20,
                   ),
                 ),
-                SizedBox(height: 7),
+                Text(
+                  "Release on: ${movie.releaseDate.toString()}",
+                  style: greyTextStyle.copyWith(
+                    fontSize: 14,
+                  ),
+                ),
+                SizedBox(height: 5),
                 Row(
                   children: [
                     Image.asset(

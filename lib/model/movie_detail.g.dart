@@ -20,6 +20,7 @@ MovieDetail _$MovieDetailFromJson(Map<String, dynamic> json) {
     title: json['title'] as String,
     voteAverage: (json['vote_average'] as num?)?.toDouble(),
     voteCount: json['vote_count'] as int?,
+    releaseDate: json['release_date'] as String?,
   );
 }
 
@@ -35,4 +36,5 @@ Map<String, dynamic> _$MovieDetailToJson(MovieDetail instance) =>
       'title': instance.title,
       'vote_average': instance.voteAverage,
       'vote_count': instance.voteCount,
+      'release_date': instance.releaseDate,
     };

@@ -34,7 +34,7 @@ class _FavoritePageState extends State<FavoritePage> {
           builder: (context, state) {
             if (state is GetFavoriteMovieFailed) {
               return Center(
-                child: Text("Failed to load favorite meals"),
+                child: Text("Failed to load favorite movies"),
               );
             } else if (state is GetFavoriteMovieSuccess) {
               var favoriteMovies = state.favoriteMovies;
@@ -54,6 +54,7 @@ class _FavoritePageState extends State<FavoritePage> {
                         voteAverage: favoriteMovie.voteAverage,
                         overview: favoriteMovie.overview,
                         voteCount: favoriteMovie.voteCount,
+                        releaseDate: favoriteMovie.releaseDate,
                       );
 
                       return GestureDetector(

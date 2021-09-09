@@ -13,8 +13,8 @@ class MovieDetailCubit extends Cubit<MovieDetailState> {
   void getMovieDetail(String id) async {
     try {
       emit(MovieDetailLoading());
-      var meals = await apiService.getMovieDetail(id);
-      emit(GetMovieDetailSuccess(meals));
+      var movies = await apiService.getMovieDetail(id);
+      emit(GetMovieDetailSuccess(movies));
     } catch (e) {
       print(e);
       emit(GetMovieDetailFailed(e.toString()));

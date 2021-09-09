@@ -202,6 +202,7 @@ class _DetailPageState extends State<DetailPage> {
                                             idMovie: movieDetail.id,
                                             title: movieDetail.title,
                                             overview: movieDetail.overview,
+                                            releaseDate: movieDetail.releaseDate,
                                             poster:
                                                 movieDetail.posterPath ?? "",
                                             voteAverage:
@@ -363,7 +364,9 @@ class _DetailPageState extends State<DetailPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ReservationPage(),
+                                builder: (context) => ReservationPage(
+                                  movie: movieDetail,
+                                ),
                               ),
                             );
                           },
