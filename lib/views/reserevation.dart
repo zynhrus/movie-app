@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:movie_app/cubit/page_cubit.dart';
 import 'package:movie_app/cubit/seat_cubit.dart';
 import 'package:movie_app/cubit/ticket_cubit.dart';
 import 'package:movie_app/model/movie_detail.dart';
@@ -28,40 +29,49 @@ class _ReservationPageState extends State<ReservationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: kPrimaryColor,
-        ),
-        backgroundColor: kTransparentColor,
-        elevation: 0,
-        title: Text(
-          "Select Seats",
-          style: primaryColorTextStyle.copyWith(fontSize: 23),
-        ),
-      ),
+      appBar: appBar(),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50),
-              child: Image.asset("assets/movie_screen.png"),
-            ),
-            SizedBox(height: 30),
-            SeatSection(
-              movie: widget.movie,
-            )
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+          child: Column(
+            children: [
+              SizedBox(height: 10),
+              movieScreen(),
+              SizedBox(height: 30),
+              SeatSection(),
+              SizedBox(height: 30),
+              SeatSummary(movie: widget.movie),
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  AppBar appBar() {
+    return AppBar(
+      iconTheme: IconThemeData(
+        color: kPrimaryColor,
+      ),
+      backgroundColor: kTransparentColor,
+      elevation: 0,
+      title: Text(
+        "Select Seats",
+        style: primaryColorTextStyle.copyWith(fontSize: 23),
+      ),
+    );
+  }
+
+  Widget movieScreen() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 40),
+      child: Image.asset("assets/movie_screen.png"),
     );
   }
 }
 
 class SeatSection extends StatelessWidget {
-  const SeatSection({Key? key, required this.movie}) : super(key: key);
-
-  final MovieDetail movie;
+  const SeatSection({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -70,88 +80,82 @@ class SeatSection extends StatelessWidget {
     }
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10),
       width: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 22),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                seatSectionLetter("A"),
-                seatSectionLetter("B"),
-                seatSectionLetter(""),
-                seatSectionLetter("C"),
-                seatSectionLetter("D"),
-              ],
-            ),
-            SizedBox(height: 16),
-            // Seat 1
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SeatItem(isAvailable: randomBool(), id: "A1"),
-                SeatItem(isAvailable: randomBool(), id: "B1"),
-                seatSectionLetter("1"),
-                SeatItem(isAvailable: randomBool(), id: "C1"),
-                SeatItem(isAvailable: randomBool(), id: "D1"),
-              ],
-            ),
-            SizedBox(height: 16),
-            // Seat 2
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SeatItem(isAvailable: randomBool(), id: "A2"),
-                SeatItem(isAvailable: randomBool(), id: "B2"),
-                seatSectionLetter("2"),
-                SeatItem(isAvailable: randomBool(), id: "C2"),
-                SeatItem(isAvailable: randomBool(), id: "D2"),
-              ],
-            ),
-            SizedBox(height: 16),
-            // Seat 3
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SeatItem(isAvailable: randomBool(), id: "A3"),
-                SeatItem(isAvailable: randomBool(), id: "B3"),
-                seatSectionLetter("3"),
-                SeatItem(isAvailable: randomBool(), id: "C3"),
-                SeatItem(isAvailable: randomBool(), id: "D3"),
-              ],
-            ),
-            SizedBox(height: 16),
-            // Seat 4
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SeatItem(isAvailable: randomBool(), id: "A4"),
-                SeatItem(isAvailable: randomBool(), id: "B4"),
-                seatSectionLetter("4"),
-                SeatItem(isAvailable: randomBool(), id: "C4"),
-                SeatItem(isAvailable: randomBool(), id: "D4"),
-              ],
-            ),
-            SizedBox(height: 16),
-            // Seat 5
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SeatItem(isAvailable: randomBool(), id: "A5"),
-                SeatItem(isAvailable: randomBool(), id: "B5"),
-                seatSectionLetter("5"),
-                SeatItem(isAvailable: randomBool(), id: "C5"),
-                SeatItem(isAvailable: randomBool(), id: "D5"),
-              ],
-            ),
-            SizedBox(height: 30),
-            SeatSummary(movie: movie),
-          ],
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              seatSectionLetter("A"),
+              seatSectionLetter("B"),
+              seatSectionLetter(""),
+              seatSectionLetter("C"),
+              seatSectionLetter("D"),
+            ],
+          ),
+          SizedBox(height: 16),
+          // Seat 1
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SeatItem(isAvailable: randomBool(), id: "A1"),
+              SeatItem(isAvailable: randomBool(), id: "B1"),
+              seatSectionLetter("1"),
+              SeatItem(isAvailable: randomBool(), id: "C1"),
+              SeatItem(isAvailable: randomBool(), id: "D1"),
+            ],
+          ),
+          SizedBox(height: 16),
+          // Seat 2
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SeatItem(isAvailable: randomBool(), id: "A2"),
+              SeatItem(isAvailable: randomBool(), id: "B2"),
+              seatSectionLetter("2"),
+              SeatItem(isAvailable: randomBool(), id: "C2"),
+              SeatItem(isAvailable: randomBool(), id: "D2"),
+            ],
+          ),
+          SizedBox(height: 16),
+          // Seat 3
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SeatItem(isAvailable: randomBool(), id: "A3"),
+              SeatItem(isAvailable: randomBool(), id: "B3"),
+              seatSectionLetter("3"),
+              SeatItem(isAvailable: randomBool(), id: "C3"),
+              SeatItem(isAvailable: randomBool(), id: "D3"),
+            ],
+          ),
+          SizedBox(height: 16),
+          // Seat 4
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SeatItem(isAvailable: randomBool(), id: "A4"),
+              SeatItem(isAvailable: randomBool(), id: "B4"),
+              seatSectionLetter("4"),
+              SeatItem(isAvailable: randomBool(), id: "C4"),
+              SeatItem(isAvailable: randomBool(), id: "D4"),
+            ],
+          ),
+          SizedBox(height: 16),
+          // Seat 5
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SeatItem(isAvailable: randomBool(), id: "A5"),
+              SeatItem(isAvailable: randomBool(), id: "B5"),
+              seatSectionLetter("5"),
+              SeatItem(isAvailable: randomBool(), id: "C5"),
+              SeatItem(isAvailable: randomBool(), id: "D5"),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -271,45 +275,50 @@ class _SeatSummaryState extends State<SeatSummary> {
           children: [
             dateAndTime(context),
             seat(state),
-            SizedBox(height: 16),
+            SizedBox(height: 10),
             total(state.length, price),
             SizedBox(height: 16),
-            GestureDetector(
-              onTap: () {
-                final myTicket = MyTicket(
-                    idMovie: movie.id,
-                    title: movie.title,
-                    poster: movie.posterPath,
-                    date: date,
-                    time: selectedTime,
-                    seats: state.join(", "),
-                    total: totalPrice.toString());
-
-                database.insertMyTicket(myTicket);
-                context.read<SeatCubit>().clearSeat();
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => MainPage()),
-                    (Route<dynamic> route) => false);
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: kPrimaryColor,
-                  borderRadius: BorderRadius.circular(defaultBorderRadius),
-                ),
-                height: 50,
-                width: double.infinity,
-                child: Center(
-                  child: Text(
-                    "Buy Ticket",
-                    style:
-                        whiteTextStyle.copyWith(fontSize: 18, fontWeight: bold),
-                  ),
-                ),
-              ),
-            )
+            buyButton(movie, state, totalPrice, database, context)
           ],
         );
       },
+    );
+  }
+
+  Widget buyButton(MovieDetail movie, List<String> state, totalPrice,
+      DatabaseMyTickets database, BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        final myTicket = MyTicket(
+            idMovie: movie.id,
+            title: movie.title,
+            poster: movie.posterPath,
+            date: date,
+            time: selectedTime,
+            seats: state.join(", "),
+            total: totalPrice.toString());
+
+        database.insertMyTicket(myTicket);
+        context.read<PageCubit>().setPage(1);
+        context.read<SeatCubit>().clearSeat();
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => MainPage()),
+            (Route<dynamic> route) => false);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: kPrimaryColor,
+          borderRadius: BorderRadius.circular(defaultBorderRadius),
+        ),
+        height: 50,
+        width: double.infinity,
+        child: Center(
+          child: Text(
+            "Buy Ticket",
+            style: whiteTextStyle.copyWith(fontSize: 18, fontWeight: bold),
+          ),
+        ),
+      ),
     );
   }
 
@@ -385,7 +394,8 @@ class _SeatSummaryState extends State<SeatSummary> {
               ),
             ),
             Text(
-              NumberFormat.currency(locale: "id", symbol: "IDR ", decimalDigits: 0)
+              NumberFormat.currency(
+                      locale: "id", symbol: "IDR ", decimalDigits: 0)
                   .format(price),
               style: primaryColorTextStyle.copyWith(
                 fontSize: 16,
@@ -406,7 +416,8 @@ class _SeatSummaryState extends State<SeatSummary> {
               ),
             ),
             Text(
-              NumberFormat.currency(locale: "id", symbol: "IDR ", decimalDigits: 0)
+              NumberFormat.currency(
+                      locale: "id", symbol: "IDR ", decimalDigits: 0)
                   .format(ticketAmount * price),
               style: primaryColorTextStyle.copyWith(
                 fontSize: 16,
@@ -419,7 +430,7 @@ class _SeatSummaryState extends State<SeatSummary> {
     );
   }
 
-  Row seat(List<String> state) {
+  Widget seat(List<String> state) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

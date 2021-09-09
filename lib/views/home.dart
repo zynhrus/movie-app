@@ -40,12 +40,12 @@ class _HomePageState extends State<HomePage> {
     return Column(
       children: [
         SearchBar(),
-        bodyList(),
+        movieList(),
       ],
     );
   }
 
-  Widget bodyList() {
+  Widget movieList() {
     return BlocBuilder<MovieCubit, MovieState>(
       builder: (context, state) {
         List<Movie> movies = [];
