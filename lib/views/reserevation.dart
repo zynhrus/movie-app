@@ -243,7 +243,7 @@ class SeatSummary extends StatefulWidget {
 
 class _SeatSummaryState extends State<SeatSummary> {
   DateTime selectedDate = DateTime.now();
-  var selectedTime = "0";
+  var selectedTime = "13:30";
   var date;
 
   Future<void> _selectDate(BuildContext context) async {
