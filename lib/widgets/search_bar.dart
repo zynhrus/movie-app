@@ -20,7 +20,7 @@ class _SearchBarState extends State<SearchBar> {
       if (text != ''){
         _debouncer.run(() => context.read<MovieCubit>().getSearchMovieResults(text));
       } else {
-        _debouncer.run(() => context.read<MovieCubit>().getTrendingMovie());
+        _debouncer.run(() => context.read<MovieCubit>().getTrendingMovie(resetList: true));
       }
     }
 

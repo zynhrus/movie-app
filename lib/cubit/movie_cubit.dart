@@ -12,7 +12,7 @@ class MovieCubit extends Cubit<MovieState> {
 
   int page = 1;
 
-  void getTrendingMovie() async {
+  void getTrendingMovie({bool resetList = false}) async {
     if (state is MovieLoading) return;
 
     final currentState = state;
@@ -24,14 +24,20 @@ class MovieCubit extends Cubit<MovieState> {
 
     try {
       emit(MovieLoading(oldMovies,isFirstFetch: page == 1));
-      await apiService.getTrendingMovieThisWeek(page).then((newMovies) {
-        page++;
-
-        final movies = (state as MovieLoading).oldMovies;
-        movies.addAll(newMovies);
-
+      if (resetList){
+        page = 1;
+        var movies = await apiService.getTrendingMovieThisWeek(page);
         emit(GetMovieSuccess(movies));
-      });
+      } else {
+        await apiService.getTrendingMovieThisWeek(page).then((newMovies) {
+          page++;
+
+          final movies = (state as MovieLoading).oldMovies;
+          movies.addAll(newMovies);
+
+          emit(GetMovieSuccess(movies));
+        });
+      }
     } catch (e) {
       print(e);
       emit(GetMovieFailed(e.toString()));
